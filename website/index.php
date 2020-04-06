@@ -27,7 +27,10 @@
                 "header" => "Authorization: Basic " . base64_encode("$username:$password"),
               )));
 
-              $url = 'http://<simple_api:80>/pozos/api/v1.0/get_student_ages';
+
+
+              $url = 'http://localhost:5001/pozos/api/v1.0/get_student_ages';
+
               $list = json_decode(file_get_contents($url, false, $context), true);
               echo "<p style='color:red;; font-size: 20px;'>This is the list of the student with age</p>";
               foreach($list["student_ages"] as $key => $value) {

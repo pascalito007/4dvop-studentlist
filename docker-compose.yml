@@ -5,6 +5,7 @@ services:
     build: ./simple_api
     volumes:
       - ./simple_api:/usr/src/app
+      - /home/salah/Desktop/student-list/simple_api/student_age.json:/data/student_age.json
     ports:
       - 5001:80
 
