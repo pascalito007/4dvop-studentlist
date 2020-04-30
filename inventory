@@ -11,3 +11,6 @@
 
 [repository]
 172.16.203.146 ansible_ssh_pass=centos ansible_sudo_pass=centos
+
+[repository:vars]
+ansible_python_interpreter=/usr/bin/python
