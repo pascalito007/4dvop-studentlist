@@ -56,21 +56,21 @@
 # ----------------------------------------------------------
 #                DEPLOY VM
 # ----------------------------------------------------------
-- name: deploy Jenkkins Docker Ansible Clair
-  hosts: deploy
-  become: true
+#- name: deploy Jenkkins Docker Ansible Clair
+  #hosts: deploy
+  #become: true
 
-  tasks:
-    - name: Deploy jenkins-docker-ansible-clair task
-      docker_container:
-        hostname: jdac
-        name: jenkins-docker-ansible-clair
-        image: dirane/jenkins-docker-ansible-clair
-        state: started
-        ports:
-          - "8080:80"
-          - "5000:5000"
-          - "443:8443"
+  #tasks:
+   # - name: Deploy jenkins-docker-ansible-clair task
+    #  docker_container:
+     #   hostname: jdac
+      #  name: jenkins-docker-ansible-clair
+       # image: dirane/jenkins-docker-ansible-clair
+        #state: started
+        #ports:
+         # - "8080:80"
+          #- "5000:5000"
+          #- "443:8443"
 
 - name: Deploy application using docker-compose
   hosts: app
@@ -93,6 +93,7 @@
       docker_container:
         hostname: gogs-ctn
         name: gogs/gogs
+        state: started
         ports:
           - "22:22"
           - "4000:3000"
@@ -108,5 +109,6 @@
       docker_container:
         hostname: registry-ctn
         name: registry
+        state: started
         ports:
           - "8000:5000"
