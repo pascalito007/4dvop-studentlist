@@ -4,7 +4,6 @@ services:
   jenkins-docker-ansible-clair:
     image: dirane/jenkins-docker-ansible-clair
     container_name: jdac
-    command: bash -c "apt update -y && apt install -y git"
     ports:
           - "8080:80"
           - "5000:5000"
