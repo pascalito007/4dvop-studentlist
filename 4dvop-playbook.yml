@@ -59,7 +59,7 @@
 #                REGISTRY VM
 # ----------------------------------------------------------
 - name: Deploy Gos, private github repository
-  hosts: registry s
+  hosts: registry
   become: true
   
   tasks:
