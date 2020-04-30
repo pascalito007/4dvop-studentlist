@@ -38,6 +38,15 @@
         state: present
         update_cache: yes
 
+
+# install and configure postgres
+- name: Install and configure postgres
+  hosts: repository
+  become: true
+
+  tasks:
+  - include_role: 
+        name: geerlingguy.postgresql
 # ----------------------------------------------------------
 #                REPOSITORY VM
 # ----------------------------------------------------------
@@ -57,19 +66,6 @@
         networks:
         - name: app-network
 
-    - name: Deploy postgres db task
-      docker_container:
-        name: pg-ctn
-        image: postgres
-        state: started
-        ports:
-          - "5433:5432"
-        environment:
-          POSTGRES_PASSWORD: admin
-          POSTGRES_USER: postgres
-          POSTGRES_DB: dvop-db
-        networks:
-        - name: app-network
 
 # ----------------------------------------------------------
 #                REGISTRY VM
