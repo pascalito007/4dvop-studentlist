@@ -52,6 +52,12 @@
         name: docker
         state: started
         enabled: yes
+        
+    - name: Install docker-compose
+      yum:
+        name: docker-compose=1.*
+        state: present
+        update_cache: yes
 
 # ----------------------------------------------------------
 #                DEPLOY VM
