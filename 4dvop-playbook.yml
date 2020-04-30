@@ -58,7 +58,7 @@
 # ----------------------------------------------------------
 #                REGISTRY VM
 # ----------------------------------------------------------
-- name: Deploy Gos, private github repository
+- name: Deploy registry, private docker registry
   hosts: registry
   become: true
   
