@@ -52,10 +52,10 @@
         name: docker
         state: started
         enabled: yes
-        
+
     - name: Install docker-compose
       yum:
-        name: docker-compose=1.*
+        name: docker-compose=1.25.*
         state: present
         update_cache: yes
 
