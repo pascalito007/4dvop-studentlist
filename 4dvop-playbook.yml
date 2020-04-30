@@ -4,7 +4,7 @@
 #                APP VM
 # ----------------------------------------------------------
 - name: Install docker
-  hosts: app
+  hosts: all
   become: true
 
   tasks:
