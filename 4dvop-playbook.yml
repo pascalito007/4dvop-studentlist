@@ -28,7 +28,7 @@
 #                REPOSITORY && LOCALHOST VM
 # ---------------------------------------------------------- 
 - name: Install git
-  hosts: repository:deploy
+  hosts: repository
   become: true
 
   tasks:
