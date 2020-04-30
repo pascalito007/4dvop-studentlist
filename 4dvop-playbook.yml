@@ -30,17 +30,6 @@
           #- "5000:5000"
           #- "443:8443"
 
-- name: Deploy application using docker-compose
-  hosts: app
-  gather_facts: no
-  become: true
-  
-  tasks:
-    - name: Run Docker Compose task
-      docker_compose:
-        build: yes
-        project_src: .
-
 # ----------------------------------------------------------
 #                REPOSITORY VM
 # ----------------------------------------------------------
