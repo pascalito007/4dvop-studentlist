@@ -2,6 +2,7 @@
 172.16.203.144 ansible_ssh_pass=centos ansible_sudo_pass=centos
 172.16.203.146 ansible_ssh_pass=centos ansible_sudo_pass=centos
 172.16.203.147 ansible_ssh_pass=centos ansible_sudo_pass=centos
+127.0.0.1
 
 [app]
 172.16.203.144 ansible_ssh_pass=centos ansible_sudo_pass=centos
@@ -12,5 +13,5 @@
 [repository]
 172.16.203.146 ansible_ssh_pass=centos ansible_sudo_pass=centos
 
-[repository:vars]
-ansible_python_interpreter=/usr/bin/python
+[deploy]
+127.0.0.1

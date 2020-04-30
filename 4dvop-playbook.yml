@@ -1,7 +1,7 @@
 ---
 
 # ----------------------------------------------------------
-#                APP VM
+#                ALL VM
 # ----------------------------------------------------------
 - name: Install docker
   hosts: all
@@ -25,33 +25,11 @@
         name: geerlingguy.docker
 
 # ----------------------------------------------------------
-#                DEPLOY VM
-# ----------------------------------------------------------
-#- name: deploy Jenkkins Docker Ansible Clair
-  #hosts: deploy
-  #become: true
+#                REPOSITORY && LOCALHOST VM
+# ---------------------------------------------------------- 
+- name: Install git
+  hosts: repository:deploy
 
-  #tasks:
-   # - name: Deploy jenkins-docker-ansible-clair task
-    #  docker_container:
-     #   hostname: jdac
-      #  name: jenkins-docker-ansible-clair
-       # image: dirane/jenkins-docker-ansible-clair
-        #state: started
-        #ports:
-         # - "8080:80"
-          #- "5000:5000"
-          #- "443:8443"
-
-# ----------------------------------------------------------
-#                REPOSITORY VM
-# ----------------------------------------------------------
-- name: Deploy Gos, private github repository
-  hosts: repository
-  become: true
-  environment:
-    PYTHONPATH: "{{ lookup('env','PYTHONPATH') }}:/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python2.7/site-packages"
-  
   tasks:
     - name: Install git
       yum:
@@ -59,6 +37,33 @@
         state: present
         update_cache: yes
 
+# ----------------------------------------------------------
+#                DEPLOY VM
+# ----------------------------------------------------------
+- name: deploy Jenkkins Docker Ansible Clair
+  hosts: deploy
+  become: true
+
+  tasks:
+    - name: Deploy jenkins-docker-ansible-clair task
+      docker_container:
+        hostname: jdac
+        name: jenkins-docker-ansible-clair
+        image: dirane/jenkins-docker-ansible-clair
+        state: started
+        ports:
+          - "8080:80"
+          - "5000:5000"
+          - "443:8443"
+
+# ----------------------------------------------------------
+#                REPOSITORY VM
+# ----------------------------------------------------------
+- name: Deploy Gos, private github repository
+  hosts: repository
+  become: true
+
+  tasks:
     - name: Deploy private repository task
       docker_container:
         name: gogs-ctn
@@ -72,8 +77,7 @@
 #                REGISTRY VM
 # ----------------------------------------------------------
 - name: Deploy Gos, private github repository
-  hosts: repository
-  gather_facts: no
+  hosts: registry s
   become: true
   
   tasks:
@@ -84,3 +88,7 @@
         state: started
         ports:
           - "8000:5000"
+
+# ----------------------------------------------------------
+#                APP VM
+# ----------------------------------------------------------
