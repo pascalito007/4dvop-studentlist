@@ -1,0 +1,112 @@
+---
+
+# ----------------------------------------------------------
+#                APP VM
+# ----------------------------------------------------------
+- name: Install docker
+  hosts: app
+  become: true
+
+  tasks:
+    - name: Install yum utils
+      yum:
+        name: yum-utils
+        state: latest
+
+    - name: Install device-mapper-persistent-data
+      yum:
+        name: device-mapper-persistent-data
+        state: latest
+
+    - name: Install lvm2
+      yum:
+        name: lvm2
+        state: latest
+
+    - name: Add Docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docer-ce.repo
+
+    - name: Enable Docker Edge repo
+      ini_file:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        section: 'docker-ce-edge'
+        option: enabled
+        value: '0'
+
+    - name: Enable Docker Test repo
+      ini_file:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        section: 'docker-ce-test'
+        option: enabled
+        value: '0'
+
+    - name: Install Docker
+      package:
+        name: docker-ce
+        state: latest
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+# ----------------------------------------------------------
+#                DEPLOY VM
+# ----------------------------------------------------------
+- name: deploy Jenkkins Docker Ansible Clair
+  hosts: deploy
+  become: true
+
+  tasks:
+    - name: Deploy jenkins-docker-ansible-clair task
+      docker_container:
+        hostname: jdac
+        name: jenkins-docker-ansible-clair
+        image: dirane/jenkins-docker-ansible-clair
+        state: started
+        ports:
+          - "8080:80"
+          - "5000:5000"
+          - "443:8443"
+
+- name: Deploy application using docker-compose
+  hosts: app
+  become: true
+  
+  tasks:
+    - name: Run Docker Compose task
+      docker_compose:
+        build: yes
+        project_src: .
+
+# ----------------------------------------------------------
+#                REPOSITORY VM
+# ----------------------------------------------------------
+- name: Deploy Gos, private github repository
+  hosts: repository
+  
+  tasks:
+    - name: Deploy private repository task
+      docker_container:
+        hostname: gogs-ctn
+        name: gogs/gogs
+        ports:
+          - "22:22"
+          - "4000:3000"
+
+# ----------------------------------------------------------
+#                REGISTRY VM
+# ----------------------------------------------------------
+- name: Deploy Gos, private github repository
+  hosts: repository
+  
+  tasks:
+    - name: Deploy private repository task
+      docker_container:
+        hostname: registry-ctn
+        name: registry
+        ports:
+          - "8000:5000"
