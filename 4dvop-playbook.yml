@@ -74,6 +74,7 @@
 
 - name: Deploy application using docker-compose
   hosts: app
+  gather_facts: no
   become: true
   
   tasks:
@@ -87,6 +88,8 @@
 # ----------------------------------------------------------
 - name: Deploy Gos, private github repository
   hosts: repository
+  gather_facts: no
+  become: true
   
   tasks:
     - name: Deploy private repository task
@@ -103,6 +106,8 @@
 # ----------------------------------------------------------
 - name: Deploy Gos, private github repository
   hosts: repository
+  gather_facts: no
+  become: true
   
   tasks:
     - name: Deploy private repository task
