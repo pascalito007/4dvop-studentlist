@@ -38,25 +38,6 @@
         update_cache: yes
 
 # ----------------------------------------------------------
-#                DEPLOY VM
-# ----------------------------------------------------------
-- name: deploy Jenkkins Docker Ansible Clair
-  hosts: deploy
-  become: true
-
-  tasks:
-    - name: Deploy jenkins-docker-ansible-clair task
-      docker_container:
-        hostname: jdac
-        name: jenkins-docker-ansible-clair
-        image: dirane/jenkins-docker-ansible-clair
-        state: started
-        ports:
-          - "8080:80"
-          - "5000:5000"
-          - "443:8443"
-
-# ----------------------------------------------------------
 #                REPOSITORY VM
 # ----------------------------------------------------------
 - name: Deploy Gos, private github repository
