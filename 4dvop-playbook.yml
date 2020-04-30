@@ -29,6 +29,7 @@
 # ---------------------------------------------------------- 
 - name: Install git
   hosts: repository:deploy
+  become: true
 
   tasks:
     - name: Install git
