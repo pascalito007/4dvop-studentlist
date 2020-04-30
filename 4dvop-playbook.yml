@@ -48,7 +48,7 @@
       use_datastore_container: true
       datastore_container_name: dbstore
       postgres_container_name: postgres
-      expose_host_port: 5432
+      expose_host_port: 5433
       postgres_docker_tag: 9.5
       postgres_docker_env:
         POSTGRES_PASSWORD: pg_admin_pw
@@ -57,10 +57,6 @@
         POSTGRES_DB: pg_default_db
         POSTGRES_INITDB_ARGS: "--data-checksums"
 
-- postgres_user:
-    name: foo
-    login_user: postgres
-    login_host: "{{ postgres_container_address }}"
 # ----------------------------------------------------------
 #                REPOSITORY VM
 # ----------------------------------------------------------
