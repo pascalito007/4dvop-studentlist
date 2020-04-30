@@ -35,7 +35,6 @@
 # ----------------------------------------------------------
 - name: Deploy Gos, private github repository
   hosts: repository
-  gather_facts: no
   become: true
   
   tasks:
