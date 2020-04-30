@@ -36,6 +36,8 @@
 - name: Deploy Gos, private github repository
   hosts: repository
   become: true
+  environment:
+    PYTHONPATH: "{{ lookup('env','PYTHONPATH') }}:/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python2.7/site-packages"
   
   tasks:
     - name: Install git
@@ -64,8 +66,8 @@
   tasks:
     - name: Deploy private repository task
       docker_container:
-        hostname: registry-ctn
-        name: registry
+        name: registry-ctn
+        image: registry
         state: started
         ports:
           - "8000:5000"
