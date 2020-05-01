@@ -122,6 +122,7 @@
 # ----------------------------------------------------------
 - name:  Build and push api and studentlist app
   hosts: localhost
+  
   tasks:
     - name: Run docker-compose down
       docker_compose:
