@@ -157,12 +157,12 @@
   tasks:
     - name: Pull simple-api from private registry
       docker_image:
-        name: http://172.16.203.147:8000/simple-api:latest
+        name: 172.16.203.147:8000/simple-api:latest
         source: pull
 
     - name: Pull app from private registry
       docker_image:
-        name: http://172.16.203.147:8000/php:apache
+        name: 172.16.203.147:8000/php:apache
         source: pull
 
     - name: Run simple-api image in a container from private repository
