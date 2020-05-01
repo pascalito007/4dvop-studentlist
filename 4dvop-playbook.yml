@@ -60,13 +60,6 @@
       docker_network:
         name: app-network
 
-    - name: Create a app-network network and connect containers
-      docker_network:
-        name: app-network
-        connected:
-          - gogs-ctn
-          - 4dvop-pg-ctn
-
     - name: Deploy private repository task
       docker_container:
         name: gogs-ctn
@@ -78,6 +71,13 @@
         networks:
         - name: app-network
         networks_cli_compatible: yes
+
+    - name: Connect containers to app-network
+      docker_network:
+        name: app-network
+        connected:
+          - gogs-ctn
+          - 4dvop-pg-ctn
 
 
 # ----------------------------------------------------------
@@ -92,7 +92,6 @@
       docker_container:
         name: registry-ctn
         image: registry
-        state: started
         ports:
           - "8000:5000"
         networks:
@@ -102,7 +101,6 @@
       docker_container:
         name: registry-frontend-ctn
         image: konradkleine/docker-registry-frontend
-        state: started
         ports:
           - "90:80"
         networks:
@@ -120,5 +118,66 @@
           - registry-frontend-ctn
 
 # ----------------------------------------------------------
+#                LOCAL build images VM
+# ----------------------------------------------------------
+- name:  Build and push api and studentlist app
+  hosts: localhost
+  tasks:
+    - name: Run docker-compose down
+      docker_compose:
+        project_src: ./
+        state: absent
+
+    - name: Run docker-compose up --build
+      docker_compose:
+        project_src: ./
+        build: yes
+      register: output
+
+    - name: Push simple-api to private registry
+      docker_image:
+        name: app:8000/api:latest
+        push: yes
+        source: local
+
+    - name: Push app to private registry
+      docker_image:
+        name: app:8000/app:latest
+        push: yes
+        source: local
+
+# ----------------------------------------------------------
 #                APP VM
 # ----------------------------------------------------------
+- name: Deploy api and studentlist app
+  hosts: app
+  become: true
+  
+  tasks:
+    - name: Pull simple-api from private registry
+      docker_image:
+        name: app:8000/api:latest
+        source: pull
+
+    - name: Pull app from private registry
+      docker_image:
+        name: app:8000/app:latest
+        source: pull
+
+    - name: Run simple-api image in a container from private repository
+      docker_container:
+        name: api-ctn
+        image: api:8000/api:latest
+        ports:
+          - "8000:5000"
+        networks:
+          - name: app-network
+    
+    - name: Run app image in a container from private repository
+      docker_container:
+        name: app-ctn
+        image: app:8000/api:latest
+        ports:
+          - "8000:5000"
+        networks:
+          - name: app-network
