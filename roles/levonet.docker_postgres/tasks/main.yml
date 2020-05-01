@@ -61,11 +61,14 @@
     restart_policy: always
     network_mode: "{{ docker_postgres__network_mode }}"	
     networks: "{{ docker_postgres__networks }}"
+    networks_cli_compatible: yes
     expose:
       - "5432"
     ports: "{{ docker_postgres__ports }}"
     user: postgres:postgres
     env: "{{ docker_postgres__default_env | combine(docker_postgres__env) }}"
+    volumes: "{{ docker_postgres__directory_volumes + docker_postgres__file_volumes }}"	
+    log_driver: "{{ docker_postgres__log_driver }}"
 
 - name: Wait for postgres to be started
   wait_for:
