@@ -2,7 +2,7 @@ pipeline {
   agent any
   stages {
     stage('Checkout the project'){
-      steps{
+      steps {
         checkout scm
         sh 'ls -la'
       }
@@ -16,6 +16,7 @@ pipeline {
     }
     stage('Deploy infrastructure with Ansible') {
       steps {
+        echo 'Hello world'
         //sh 'ansible-playbook -i ./ansible/inventory ./ansible/4dvop-playbook.yml'
       }
     }
