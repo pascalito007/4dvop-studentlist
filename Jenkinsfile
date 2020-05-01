@@ -2,8 +2,10 @@ pipeline {
   agent any
   stages {
     stage('checkout the project'){
-      checkout scm
-      sh 'ls -la'
+      steps{
+        checkout scm
+        sh 'ls -la'
+      }
     }
     stage('Build simple api Dockerfile and app image') {
       steps {
