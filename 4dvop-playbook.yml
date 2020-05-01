@@ -36,7 +36,6 @@
   - role: levonet.docker_postgres
     docker_postgres__name: 4dvop-gp-ctn
     docker_postgres__image: postgres:11.1-alpine
-    docker_postgres__port: 5433
     docker_postgres__network_mode: bridge
     docker_postgres__networks: ['app-network']
     docker_postgres__superuser_name: postgres
