@@ -11,7 +11,7 @@ docker_postgres__network_mode:
 docker_postgres__networks: []
 docker_postgres__env: {}
 docker_postgres__log_driver: json-file
-docker_postgres__log_options: []
+docker_postgres__log_options:
 docker_postgres__slave: no
 docker_postgres__master_host: localhost
 docker_postgres__master_port: 5432
@@ -61,7 +61,7 @@ docker_postgres__directories:
   group: 70
 - path: "{{ docker_postgres__home }}/conf"
 docker_postgres__ports:
-- "5433:5432"
+- "{{ docker_postgres__port }}:5432"
 docker_postgres__directory_volumes:
 - "{{ docker_postgres__home }}/conf:/etc/postgresql"
 - "{{ docker_postgres__home }}/data:/var/lib/postgresql/data"
