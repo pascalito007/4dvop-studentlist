@@ -69,6 +69,7 @@
     env: "{{ docker_postgres__default_env | combine(docker_postgres__env) }}"
     volumes: "{{ docker_postgres__directory_volumes + docker_postgres__file_volumes }}"	
     log_driver: "{{ docker_postgres__log_driver }}"
+    log_options: "{{ docker_postgres__log_options }}"
 
 - name: Wait for postgres to be started
   wait_for:
