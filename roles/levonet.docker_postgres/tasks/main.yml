@@ -59,8 +59,9 @@
     command: --config_file=/etc/postgresql/postgresql.conf --hba_file=/etc/postgresql/pg_hba.conf
     pull: "{{ docker_postgres__pull_image }}"
     restart_policy: always
-    network_mode: "{{ docker_postgres__network_mode }}"
-    networks: "{{ docker_postgres__networks }}"
+    network_mode: "bridge"
+    networks:
+      - name: "app-network"
     networks_cli_compatible: yes
     expose:
       - "5432"
