@@ -56,19 +56,13 @@
   docker_container:
     name: "{{ docker_postgres__name }}"
     image: "{{ docker_postgres__image }}"
-    command: --config_file=/etc/postgresql/postgresql.conf --hba_file=/etc/postgresql/pg_hba.conf
     pull: "{{ docker_postgres__pull_image }}"
     restart_policy: always
-    network_mode: "{{ docker_postgres__network_mode }}"
-    networks: "{{ docker_postgres__networks }}"
     expose:
       - 5432
     ports: "{{ docker_postgres__ports }}"
     user: postgres:postgres
     env: "{{ docker_postgres__default_env | combine(docker_postgres__env) }}"
-    volumes: "{{ docker_postgres__directory_volumes + docker_postgres__file_volumes }}"
-    log_driver: "{{ docker_postgres__log_driver }}"
-    log_options: "{{ docker_postgres__log_options }}"
 
 - name: Wait for postgres to be started
   wait_for:
