@@ -17,7 +17,7 @@ pipeline {
     stage('Deploy infrastructure with Ansible') {
       steps {
         echo 'Hello world'
-        //sh 'ansible-playbook -i ./ansible/inventory ./ansible/4dvop-playbook.yml'
+        sh 'ansible-playbook -i ./ansible/inventory ./ansible/4dvop-playbook.yml'
       }
     }
     stage('Testing image') {
