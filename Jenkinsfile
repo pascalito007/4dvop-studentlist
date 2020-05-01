@@ -1,20 +1,22 @@
 pipeline {
   agent any
   stages {
-    stage('checkout the project'){
+    stage('Checkout the project'){
       steps{
         checkout scm
         sh 'ls -la'
       }
     }
-    stage('Build simple api Dockerfile and app image') {
+    stage('Build api and studentlist app image') {
       steps {
-        echo 'Hello world'
+        sh 'docker-compose build'
+        sh 'docker images'
+        sh 'docker ps -a'
       }
     }
     stage('Deploy infrastructure with Ansible') {
       steps {
-        echo 'Hello world'
+        //sh 'ansible-playbook -i ./ansible/inventory ./ansible/4dvop-playbook.yml'
       }
     }
     stage('Testing image') {
@@ -53,6 +55,11 @@ pipeline {
         echo 'delete working directory at the end'
         deleteDir()
         sh 'ls -la'
+        //echo 'clean docker images and containers'
+        //sh 'docker ps -a -q'
+        //sh 'docker rm -f $(docker ps -a -q)'
+        //sh 'docker images'
+        //sh 'docker rmi -f $(docker images -a -q)'
       }
       success{
         echo "====++++Successfully completed++++===="
