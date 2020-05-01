@@ -15,3 +15,6 @@
 
 [deploy]
 172.16.203.144 ansible_ssh_pass=centos ansible_sudo_pass=centos
+
+[local]
+localhost ansible_connection=local

@@ -4,7 +4,7 @@
 #                ALL VM
 # ----------------------------------------------------------
 - name: Install docker
-  hosts: all:172.17.0.2
+  hosts: all:local
   become: true
   
   pre_tasks:
@@ -121,7 +121,7 @@
 #                LOCAL build images VM
 # ----------------------------------------------------------
 - name:  Build and push api and studentlist app
-  hosts: 172.17.0.2
+  hosts: local
   
   tasks:
     - name: Run docker-compose down
