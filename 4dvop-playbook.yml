@@ -12,13 +12,13 @@
       yum:
         name: epel-release
         state: latest
-    - name: Install python pip
-      yum:
-        name: python-pip
-        state: latest
-    - name: Install docker-py
-      pip:
-        name: docker-py
+    # - name: Install python pip
+    #   yum:
+    #     name: python-pip
+    #     state: latest
+    # - name: Install docker-py
+    #   pip:
+    #     name: docker-py
 
   tasks:
     - include_role: 
