@@ -88,13 +88,6 @@
   become: true
   
   tasks:
-    - name: Create a registry-network network and connect containers
-      docker_network:
-        name: registry-network
-        connected:
-          - registry-ctn
-          - registry-frontend-ctn
-          
     - name: Deploy private docker registry task
       docker_container:
         name: registry-ctn
@@ -118,6 +111,13 @@
           ENV_DOCKER_REGISTRY_HOST: registry-ctn
           ENV_DOCKER_REGISTRY_PORT: 80
           ENV_DOCKER_REGISTRY_USE_SSL: 1
+
+    - name: Create a registry-network network and connect containers
+      docker_network:
+        name: registry-network
+        connected:
+          - registry-ctn
+          - registry-frontend-ctn
 
 # ----------------------------------------------------------
 #                APP VM
