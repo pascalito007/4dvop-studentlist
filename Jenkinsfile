@@ -53,9 +53,10 @@ pipeline {
   }
   post{
       always{
-        echo 'delete working directory at the end'
-        deleteDir()
-        sh 'ls -la'
+        //echo 'delete working directory at the end'
+        //deleteDir()
+        //sh 'ls -la'
+        sh 'pwd'
         //echo 'clean docker images and containers'
         //sh 'docker ps -a -q'
         //sh 'docker rm -f $(docker ps -a -q)'
