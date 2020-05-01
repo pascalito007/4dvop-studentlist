@@ -36,6 +36,18 @@
   tasks:
     - include_role: 
         name: levonet.docker_postgres
+      vars:
+        docker_postgres__name: 4dvop-pg-ctn
+        docker_postgres__image: postgres:11.1-alpine
+        docker_postgres__port: 5678
+        docker_postgres__superuser_name: superuser
+        docker_postgres__superuser_password: supersecret
+        docker_postgres__env:
+          POSTGRES_DB: 4dvop-db
+        docker_postgres__log_driver: syslog
+        docker_postgres__log_options:
+          syslog-facility: local0
+          tag: "{{ docker_postgres__name }}"
 
 # ----------------------------------------------------------
 #                REPOSITORY  VM
