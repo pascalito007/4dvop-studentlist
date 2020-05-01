@@ -43,10 +43,6 @@
     docker_postgres__superuser_password: admin
     docker_postgres__env:
       POSTGRES_DB: 4dvop-db
-    docker_postgres__log_driver: syslog
-    docker_postgres__log_options:
-      syslog-facility: local0
-      tag: "{{ docker_postgres__name }}"
 
 
 # ----------------------------------------------------------
