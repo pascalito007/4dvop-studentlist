@@ -61,7 +61,7 @@ docker_postgres__directories:
   group: 70
 - path: "{{ docker_postgres__home }}/conf"
 docker_postgres__ports:
-- "{{ docker_postgres__port }}:5432"
+- "5433:5432"
 docker_postgres__directory_volumes:
 - "{{ docker_postgres__home }}/conf:/etc/postgresql"
 - "{{ docker_postgres__home }}/data:/var/lib/postgresql/data"
