@@ -11,7 +11,7 @@ docker_postgres__network_mode:
 docker_postgres__networks: []
 docker_postgres__env: {}
 docker_postgres__log_driver: json-file
-docker_postgres__log_options: ''
+docker_postgres__log_options: []
 docker_postgres__slave: no
 docker_postgres__master_host: localhost
 docker_postgres__master_port: 5432
