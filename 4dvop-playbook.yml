@@ -24,8 +24,33 @@
     - include_role: 
         name: geerlingguy.docker
 
+
+# --------------------------------------------------------------
+#                REPOSITORY  VM - SETUP postgres for gogs image
+# --------------------------------------------------------------
+- name: Setup postgres container required by gogs image
+  hosts: repository
+  become: yes
+  become_method: sudo
+  roles:
+  - role: levonet.docker_postgres
+    docker_postgres__name: 4dvop-gp-ctn
+    docker_postgres__image: postgres:11.1-alpine
+    docker_postgres__port: 5433
+    docker_postgres__network_mode: bridge
+    docker_postgres__networks: ['app-network']
+    docker_postgres__superuser_name: postgres
+    docker_postgres__superuser_password: admin
+    docker_postgres__env:
+      POSTGRES_DB: 4dvop-db
+    docker_postgres__log_driver: syslog
+    docker_postgres__log_options:
+      syslog-facility: local0
+      tag: "{{ docker_postgres__name }}"
+
+
 # ----------------------------------------------------------
-#                REPOSITORY && LOCALHOST VM
+#                REPOSITORY  VM
 # ---------------------------------------------------------- 
 - name: Install git
   hosts: repository
