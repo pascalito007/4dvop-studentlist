@@ -28,22 +28,14 @@
 # --------------------------------------------------------------
 #                REPOSITORY  VM - SETUP postgres for gogs image
 # --------------------------------------------------------------
-- name: Setup postgres container required by gogs image
+
+- name: setup postgres
   hosts: repository
   become: true
 
   tasks:
     - include_role: 
-            name: levonet.docker_postgres
-      vars:
-        docker_postgres__name: 4dvop-gp-ctn
-        docker_postgres__image: postgres:11.1-alpine
-        docker_postgres__network_mode: bridge
-        docker_postgres__networks: ['app-network']
-        docker_postgres__superuser_name: postgres
-        docker_postgres__superuser_password: admin
-        docker_postgres__env:
-          POSTGRES_DB: 4dvop-db
+        name: levonet.docker_postgres
 
 # ----------------------------------------------------------
 #                REPOSITORY  VM
