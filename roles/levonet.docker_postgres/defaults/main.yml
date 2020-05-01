@@ -8,7 +8,7 @@ docker_postgres__remove_existing_container: yes
 docker_postgres__pull_image: yes
 docker_postgres__file_volumes: []
 docker_postgres__network_mode: bridge
-docker_postgres__networks: ['app-network']
+docker_postgres__networks: app-network
 docker_postgres__env: {}
 docker_postgres__log_driver: json-file
 docker_postgres__log_options:

@@ -60,7 +60,8 @@
     pull: "{{ docker_postgres__pull_image }}"
     restart_policy: always
     network_mode: "{{ docker_postgres__network_mode }}"
-    networks: "{{ docker_postgres__networks }}"
+    networks:
+      - name: "{{ docker_postgres__networks }}"
     networks_cli_compatible: yes
     expose:
       - "5432"
