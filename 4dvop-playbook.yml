@@ -150,35 +150,35 @@
 # ----------------------------------------------------------
 #                APP VM
 # ----------------------------------------------------------
-- name: Deploy api and studentlist app
-  hosts: app
-  become: true
+# - name: Deploy api and studentlist app
+#   hosts: app
+#   become: true
   
-  tasks:
-    - name: Pull simple-api from private registry
-      docker_image:
-        name: 172.16.203.147:8000/simple-api:latest
-        source: pull
+#   tasks:
+#     - name: Pull simple-api from private registry
+#       docker_image:
+#         name: 172.16.203.147:8000/simple-api:latest
+#         source: pull
 
-    - name: Pull app from private registry
-      docker_image:
-        name: 172.16.203.147:8000/php:apache
-        source: pull
+#     - name: Pull app from private registry
+#       docker_image:
+#         name: 172.16.203.147:8000/php:apache
+#         source: pull
 
-    - name: Run simple-api image in a container from private repository
-      docker_container:
-        name: api-ctn
-        image: 172.16.203.147:8000/simple-api:latest
-        ports:
-          - "5001:5000"
-        networks:
-          - name: app-network
+#     - name: Run simple-api image in a container from private repository
+#       docker_container:
+#         name: api-ctn
+#         image: 172.16.203.147:8000/simple-api:latest
+#         ports:
+#           - "5001:5000"
+#         networks:
+#           - name: app-network
     
-    - name: Run app image in a container from private repository
-      docker_container:
-        name: app-ctn
-        image: 172.16.203.147:8000/php:apache
-        ports:
-          - "3000:80"
-        networks:
-          - name: app-network
+#     - name: Run app image in a container from private repository
+#       docker_container:
+#         name: app-ctn
+#         image: 172.16.203.147:8000/php:apache
+#         ports:
+#           - "3000:80"
+#         networks:
+#           - name: app-network
