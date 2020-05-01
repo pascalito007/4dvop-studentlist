@@ -16,6 +16,7 @@ pipeline {
     // }
     stage('Deploy infrastructure with Ansible') {
       steps {
+        sh 'hostname -I'
         sh 'ansible-playbook -i inventory 4dvop-playbook.yml'
       }
     }
