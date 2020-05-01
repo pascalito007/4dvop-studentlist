@@ -44,7 +44,6 @@
         docker_postgres__superuser_password: supersecret
         docker_postgres__env:
           POSTGRES_DB: 4dvop-db
-        docker_postgres__log_driver: syslog
 
 # ----------------------------------------------------------
 #                REPOSITORY  VM
