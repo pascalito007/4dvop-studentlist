@@ -59,7 +59,7 @@
     pull: "{{ docker_postgres__pull_image }}"
     restart_policy: always
     expose:
-      - 5432
+      - "5432"
     ports: "{{ docker_postgres__ports }}"
     user: postgres:postgres
     env: "{{ docker_postgres__default_env | combine(docker_postgres__env) }}"
