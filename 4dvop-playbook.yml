@@ -141,12 +141,12 @@
   hosts: local
   
   tasks:
-    - name: Run docker-compose down
+    - name: Run docker compose down
       docker_compose:
         project_src: ./
         state: absent
 
-    - name: Run docker-compose --build
+    - name: Run docker compose build
       docker_compose:
         project_src: ./
         build: yes
