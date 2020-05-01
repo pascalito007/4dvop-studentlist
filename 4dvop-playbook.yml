@@ -109,7 +109,7 @@
           - name: registry-network
         env:
           ENV_DOCKER_REGISTRY_HOST: registry-ctn
-          ENV_DOCKER_REGISTRY_PORT: 80
+          ENV_DOCKER_REGISTRY_PORT: "80"
           ENV_DOCKER_REGISTRY_USE_SSL: 1
 
     - name: Create a registry-network network and connect containers
