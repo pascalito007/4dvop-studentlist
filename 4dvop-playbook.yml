@@ -22,20 +22,20 @@
 
   tasks:
     - include_role: 
-        name: geerlingguy.docker
+        name: docker-install-role
 
 
-# --------------------------------------------------------------
-#                REPOSITORY  VM - SETUP postgres for gogs image
-# --------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
+#     REPOSITORY  VM - SETUP postgres for gogs image and Gogs private git repository
+# ------------------------------------------------------------------------------------------
 
-- name: setup postgres
+- name: setup postgres database required by gogs
   hosts: repository
   become: true
 
   tasks:
     - include_role: 
-        name: levonet.docker_postgres
+        name: docker-postgres-setup-role
       vars:
         docker_postgres__name: 4dvop-pg-ctn
         docker_postgres__image: postgres:11.1-alpine
@@ -44,15 +44,8 @@
         docker_postgres__superuser_password: supersecret
         docker_postgres__env:
           POSTGRES_DB: 4dvop-db
-        docker_postgres__log_driver: syslog
-        docker_postgres__log_options:
-          syslog-facility: local0
-          tag: "{{ docker_postgres__name }}"
 
-# ----------------------------------------------------------
-#                REPOSITORY  VM
-# ---------------------------------------------------------- 
-- name: Install git
+- name: Deploy Gos, private github repository
   hosts: repository
   become: true
 
@@ -63,14 +56,6 @@
         state: present
         update_cache: yes
 
-# ----------------------------------------------------------
-#                REPOSITORY VM
-# ----------------------------------------------------------
-- name: Deploy Gos, private github repository
-  hosts: repository
-  become: true
-
-  tasks:
     - name: Deploy private repository task
       docker_container:
         name: gogs-ctn
@@ -83,6 +68,13 @@
         - name: app-network
         networks_cli_compatible: yes
 
+    - name: Create a registry-network network and connect containers
+      docker_network:
+        name: registry-network
+        connected:
+          - gogs-ctn
+          - 4dvop-pg-ctn
+
 
 # ----------------------------------------------------------
 #                REGISTRY VM
@@ -92,13 +84,36 @@
   become: true
   
   tasks:
-    - name: Deploy private repository task
+    - name: Deploy private docker registry task
       docker_container:
         name: registry-ctn
         image: registry
         state: started
         ports:
           - "8000:5000"
+        networks:
+          - name: registry-network
+
+    - name: Deploy private docker frontend registry task
+      docker_container:
+        name: registry-frontend-ctn
+        image: konradkleine/docker-registry-frontend
+        state: started
+        ports:
+          - "90:80"
+        networks:
+          - name: registry-network
+        env:
+          ENV_DOCKER_REGISTRY_HOST: registry-ctn
+          ENV_DOCKER_REGISTRY_PORT: 80
+          ENV_DOCKER_REGISTRY_USE_SSL: 1
+
+    - name: Create a registry-network network and connect containers
+      docker_network:
+        name: registry-network
+        connected:
+          - registry-ctn
+          - registry-frontend-ctn
 
 # ----------------------------------------------------------
 #                APP VM

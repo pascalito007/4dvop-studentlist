@@ -7,45 +7,44 @@ pipeline {
         sh 'ls -la'
       }
     }
-    stage('Build api and studentlist app image') {
-      steps {
-        sh 'docker-compose build'
-        sh 'docker images'
-        sh 'docker ps -a'
-      }
-    }
+    // stage('Build api and studentlist app image') {
+    //   steps {
+    //     sh 'docker-compose build'
+    //     sh 'docker images'
+    //     sh 'docker ps -a'
+    //   }
+    // }
     stage('Deploy infrastructure with Ansible') {
       steps {
-        echo 'Hello world'
         sh 'ansible-playbook -i inventory 4dvop-playbook.yml'
       }
     }
-    stage('Testing image') {
+    stage('[NO OK]Testing image') {
       steps {
         echo 'Hello world'
       }
     }
-    stage('Run simple api container') {
+    stage('[NO OK]Run simple api container') {
       steps {
         echo 'Hello world'
       }
     }
-    stage('Testing the api') {
+    stage('[NO OK]Testing the api') {
       steps {
         echo 'Hello world'
       }
     }
-    stage('Validate image with Clair') {
+    stage('[NO OK]Validate image with Clair') {
       steps {
         echo 'Hello world'
       }
     }
-    stage('push images to registry server') {
+    stage('[NO OK]push images to registry server') {
       steps {
         echo 'Hello world'
       }
     }
-    stage('Run security testing with Arachni') {
+    stage('[NO OK]Run security testing with Arachni') {
       steps {
         echo 'Hello world'
       }
