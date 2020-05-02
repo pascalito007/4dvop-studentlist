@@ -9,6 +9,7 @@
   vars:
     pip_install_packages:
       - name: docker
+        docker_package_state: absent
 
   roles:
     - geerlingguy.pip
@@ -74,19 +75,19 @@
 # ----------------------------------------------------------
 #                REGISTRY VM
 # ----------------------------------------------------------
-- name: Deploy registry, private docker registry
-  hosts: registry
-  become: true
+# - name: Deploy registry, private docker registry
+#   hosts: registry
+#   become: true
   
-  tasks:
-    - name: Deploy private docker registry task
-      docker_container:
-        name: registry-ctn
-        image: registry
-        ports:
-          - "8000:5000"
-        networks:
-          - name: registry-network
+#   tasks:
+#     - name: Deploy private docker registry task
+#       docker_container:
+#         name: registry-ctn
+#         image: registry
+#         ports:
+#           - "8000:5000"
+#         networks:
+#           - name: registry-network
 
     # - name: Deploy private docker frontend registry task
     #   docker_container:
