@@ -25,22 +25,22 @@
         name: docker-install-role
 
 
-# - name: Install docker
-#   hosts: local
-#   become: true
+- name: Install docker
+  hosts: local
+  become: true
   
-#   pre_tasks:
-#     - name: Install python pip
-#       apt:
-#         name: python-pip
-#         state: latest
-#     - name: Install docker-py
-#       pip:
-#         name: docker-py
+  pre_tasks:
+    - name: Install python pip
+      apt:
+        name: python-pip
+        state: latest
+    - name: Install docker-py
+      pip:
+        name: docker-py
 
-#   tasks:
-#     - include_role: 
-#         name: docker-install-role
+  tasks:
+    - include_role: 
+        name: docker-install-role
 
 # -----------------------------------------------------------------------------------------
 #     REPOSITORY  VM - SETUP postgres for gogs image and Gogs private git repository
