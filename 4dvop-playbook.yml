@@ -120,35 +120,19 @@
     - build-push-image
 
   tasks:
-    - docker_compose:
-        project_name: student-list
-        definition:
-          services:
-            website:
-              image: php:apache
-              ports:
-                - "3000:80"
-              depends_on:
-                - api
-
-            api:
-              build: "./"
-              volumes:
-                - "./website:/var/www/html"
-              ports:
-                - "5001:5000"
-
-    - name: Push simple-api to private registry
+    - name: Build an image and push it to a private repo
       docker_image:
-        name: 172.16.203.147:8000/simple-api:latest
+        build:
+          path: ./simple_api
+        name: 172.16.203.147:8000/simple-api
+        tag: v1
         push: yes
-        source: local
+        source: build
 
-    - name: Push app to private registry
+    - name: Pull from registry
       docker_image:
-        name: 172.16.203.147:8000/php:apache
-        push: yes
-        source: local
+        name: php:apache
+        source: pull
 
 # ----------------------------------------------------------
 #                APP VM
