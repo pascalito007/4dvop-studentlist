@@ -112,32 +112,32 @@
 # ----------------------------------------------------------
 #                LOCAL build images VM
 # ----------------------------------------------------------
-- name:  Build and push api and studentlist app
-  hosts: local
+# - name:  Build and push api and studentlist app
+#   hosts: local
   
-  tasks:
-    - name: Run docker compose down
-      docker_compose:
-        project_src: ./
-        state: absent
+#   tasks:
+#     - name: Run docker compose down
+#       docker_compose:
+#         project_src: ./
+#         state: absent
 
-    - name: Run docker compose build
-      docker_compose:
-        project_src: ./
-        build: yes
-      register: output
+#     - name: Run docker compose build
+#       docker_compose:
+#         project_src: ./
+#         build: yes
+#       register: output
 
-    - name: Push simple-api to private registry
-      docker_image:
-        name: 172.16.203.147:8000/simple-api:latest
-        push: yes
-        source: local
+#     - name: Push simple-api to private registry
+#       docker_image:
+#         name: 172.16.203.147:8000/simple-api:latest
+#         push: yes
+#         source: local
 
-    - name: Push app to private registry
-      docker_image:
-        name: 172.16.203.147:8000/php:apache
-        push: yes
-        source: local
+#     - name: Push app to private registry
+#       docker_image:
+#         name: 172.16.203.147:8000/php:apache
+#         push: yes
+#         source: local
 
 # ----------------------------------------------------------
 #                APP VM
