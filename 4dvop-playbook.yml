@@ -30,7 +30,7 @@
     - postgres
 
   tasks:
-    - include_role: 
+    - include_role:
         name: docker-postgres-setup-role
       vars:
         docker_postgres__name: 4dvop-pg-ctn
@@ -66,8 +66,6 @@
         ports:
           - "23:22"
           - "4000:3000"
-        networks:
-        - name: app-network
         networks_cli_compatible: yes
 
     - name: Connect containers to app-network
@@ -86,7 +84,7 @@
   become: true
   tags:
     - registry
-  
+
   tasks:
     - name: Deploy private docker registry task
       docker_container:
@@ -103,8 +101,6 @@
         image: konradkleine/docker-registry-frontend
         ports:
           - "90:80"
-        networks:
-          - name: registry-network
         env:
           ENV_DOCKER_REGISTRY_HOST: registry-ctn
           ENV_DOCKER_REGISTRY_PORT: "80"
@@ -124,18 +120,39 @@
   hosts: local
   tags:
     - build-push-image
-  
-  tasks:
-    - name: Run docker compose down
-      docker_compose:
-        project_src: ./
-        state: absent
 
-    - name: Run docker compose build
-      docker_compose:
-        project_src: ./
-        build: yes
-      register: output
+  tasks:
+#    - name: Run docker compose down
+#      docker_compose:
+#        project_src: ./
+#        state: absent
+#
+#    - name: Run docker compose build
+#      docker_compose:
+#        project_src: ./
+#        build: yes
+
+    - docker_compose:
+        project_name: student-list
+        definition:
+          version: '2'
+          services:
+            website:
+              image: php:apache
+              container_name: app
+              depends_on:
+                - api
+              ports:
+                - "3000:80"
+            api:
+              build: "."
+              container_name: api
+              name: simple-api
+              volumes:
+                - "./website:/var/www/html"
+              ports:
+                - "5001:5000"
+        register: output
 
     - name: Push simple-api to private registry
       docker_image:
@@ -157,7 +174,7 @@
   become: true
   tags:
     - deploy-apps
-  
+
   tasks:
     - name: Pull simple-api from private registry
       docker_image:
@@ -177,7 +194,7 @@
           - "5001:5000"
         networks:
           - name: app-network
-    
+
     - name: Run app image in a container from private repository
       docker_container:
         name: app-ctn
