@@ -6,13 +6,15 @@
 - name: Install docker
   hosts: all
   become: true
+  tags:
+    - docker
   vars:
     pip_install_packages:
       - name: docker
         docker_package_state: present
 
   roles:
-    #- geerlingguy.pip
+    - geerlingguy.pip
     - geerlingguy.docker
 
 
@@ -21,55 +23,59 @@
 #     REPOSITORY  VM - SETUP postgres for gogs image and Gogs private git repository
 # ------------------------------------------------------------------------------------------
 
-# - name: setup postgres database required by gogs
-#   hosts: repository
-#   become: true
+- name: setup postgres database required by gogs
+  hosts: repository
+  become: true
+  tags:
+    - postgres
 
-#   tasks:
-#     - include_role: 
-#         name: docker-postgres-setup-role
-#       vars:
-#         docker_postgres__name: 4dvop-pg-ctn
-#         docker_postgres__image: postgres:11.1-alpine
-#         docker_postgres__port: 5678
-#         docker_postgres__superuser_name: superuser
-#         docker_postgres__superuser_password: supersecret
-#         docker_postgres__env:
-#           POSTGRES_DB: 4dvop-db
+  tasks:
+    - include_role: 
+        name: docker-postgres-setup-role
+      vars:
+        docker_postgres__name: 4dvop-pg-ctn
+        docker_postgres__image: postgres:11.1-alpine
+        docker_postgres__port: 5678
+        docker_postgres__superuser_name: superuser
+        docker_postgres__superuser_password: supersecret
+        docker_postgres__env:
+          POSTGRES_DB: 4dvop-db
 
-# - name: Deploy Gos, private github repository
-#   hosts: repository
-#   become: true
+- name: Deploy Gos, private github repository
+  hosts: repository
+  become: true
+  tags:
+    - repo
 
-#   tasks:
-#     - name: Install git
-#       yum:
-#         name: git
-#         state: present
-#         update_cache: yes
+  tasks:
+    - name: Install git
+      yum:
+        name: git
+        state: present
+        update_cache: yes
 
-#     - name: Create app-network network
-#       docker_network:
-#         name: app-network
+    - name: Create app-network network
+      docker_network:
+        name: app-network
 
-#     - name: Deploy private repository task
-#       docker_container:
-#         name: gogs-ctn
-#         image: gogs/gogs
-#         state: started
-#         ports:
-#           - "23:22"
-#           - "4000:3000"
-#         networks:
-#         - name: app-network
-#         networks_cli_compatible: yes
+    - name: Deploy private repository task
+      docker_container:
+        name: gogs-ctn
+        image: gogs/gogs
+        state: started
+        ports:
+          - "23:22"
+          - "4000:3000"
+        networks:
+        - name: app-network
+        networks_cli_compatible: yes
 
-#     - name: Connect containers to app-network
-#       docker_network:
-#         name: app-network
-#         connected:
-#           - gogs-ctn
-#           - 4dvop-pg-ctn
+    - name: Connect containers to app-network
+      docker_network:
+        name: app-network
+        connected:
+          - gogs-ctn
+          - 4dvop-pg-ctn
 
 
 # ----------------------------------------------------------
@@ -78,6 +84,8 @@
 - name: Deploy registry, private docker registry
   hosts: registry
   become: true
+  tags:
+    - registry
   
   tasks:
     - name: Deploy private docker registry task
@@ -89,31 +97,33 @@
         networks:
           - name: registry-network
 
-    # - name: Deploy private docker frontend registry task
-    #   docker_container:
-    #     name: registry-frontend-ctn
-    #     image: konradkleine/docker-registry-frontend
-    #     ports:
-    #       - "90:80"
-    #     networks:
-    #       - name: registry-network
-    #     env:
-    #       ENV_DOCKER_REGISTRY_HOST: registry-ctn
-    #       ENV_DOCKER_REGISTRY_PORT: "80"
-    #       ENV_DOCKER_REGISTRY_USE_SSL: "1"
+    - name: Deploy private docker frontend registry task
+      docker_container:
+        name: registry-frontend-ctn
+        image: konradkleine/docker-registry-frontend
+        ports:
+          - "90:80"
+        networks:
+          - name: registry-network
+        env:
+          ENV_DOCKER_REGISTRY_HOST: registry-ctn
+          ENV_DOCKER_REGISTRY_PORT: "80"
+          ENV_DOCKER_REGISTRY_USE_SSL: "1"
 
-    # - name: Create a registry-network network and connect containers
-    #   docker_network:
-    #     name: registry-network
-    #     connected:
-    #       - registry-ctn
-    #       - registry-frontend-ctn
+    - name: Create a registry-network network and connect containers
+      docker_network:
+        name: registry-network
+        connected:
+          - registry-ctn
+          - registry-frontend-ctn
 
 # ----------------------------------------------------------
 #                LOCAL build images VM
 # ----------------------------------------------------------
 - name:  Build and push api and studentlist app
   hosts: local
+  tags:
+    - build-push-image
   
   tasks:
     - name: Run docker compose down
@@ -121,56 +131,58 @@
         project_src: ./
         state: absent
 
-#     - name: Run docker compose build
-#       docker_compose:
-#         project_src: ./
-#         build: yes
-#       register: output
+    - name: Run docker compose build
+      docker_compose:
+        project_src: ./
+        build: yes
+      register: output
 
-#     - name: Push simple-api to private registry
-#       docker_image:
-#         name: 172.16.203.147:8000/simple-api:latest
-#         push: yes
-#         source: local
+    - name: Push simple-api to private registry
+      docker_image:
+        name: 172.16.203.147:8000/simple-api:latest
+        push: yes
+        source: local
 
-#     - name: Push app to private registry
-#       docker_image:
-#         name: 172.16.203.147:8000/php:apache
-#         push: yes
-#         source: local
+    - name: Push app to private registry
+      docker_image:
+        name: 172.16.203.147:8000/php:apache
+        push: yes
+        source: local
 
 # ----------------------------------------------------------
 #                APP VM
 # ----------------------------------------------------------
-# - name: Deploy api and studentlist app
-#   hosts: app
-#   become: true
+- name: Deploy api and studentlist app
+  hosts: app
+  become: true
+  tags:
+    - deploy-apps
   
-#   tasks:
-#     - name: Pull simple-api from private registry
-#       docker_image:
-#         name: 172.16.203.147:8000/simple-api:latest
-#         source: pull
+  tasks:
+    - name: Pull simple-api from private registry
+      docker_image:
+        name: 172.16.203.147:8000/simple-api:latest
+        source: pull
 
-#     - name: Pull app from private registry
-#       docker_image:
-#         name: 172.16.203.147:8000/php:apache
-#         source: pull
+    - name: Pull app from private registry
+      docker_image:
+        name: 172.16.203.147:8000/php:apache
+        source: pull
 
-#     - name: Run simple-api image in a container from private repository
-#       docker_container:
-#         name: api-ctn
-#         image: 172.16.203.147:8000/simple-api:latest
-#         ports:
-#           - "5001:5000"
-#         networks:
-#           - name: app-network
+    - name: Run simple-api image in a container from private repository
+      docker_container:
+        name: api-ctn
+        image: 172.16.203.147:8000/simple-api:latest
+        ports:
+          - "5001:5000"
+        networks:
+          - name: app-network
     
-#     - name: Run app image in a container from private repository
-#       docker_container:
-#         name: app-ctn
-#         image: 172.16.203.147:8000/php:apache
-#         ports:
-#           - "3000:80"
-#         networks:
-#           - name: app-network
+    - name: Run app image in a container from private repository
+      docker_container:
+        name: app-ctn
+        image: 172.16.203.147:8000/php:apache
+        ports:
+          - "3000:80"
+        networks:
+          - name: app-network
