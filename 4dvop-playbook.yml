@@ -120,16 +120,6 @@
     - build-push-image
 
   tasks:
-#    - name: Run docker compose down
-#      docker_compose:
-#        project_src: ./
-#        state: absent
-#
-#    - name: Run docker compose build
-#      docker_compose:
-#        project_src: ./
-#        build: yes
-
     - docker_compose:
         project_name: student-list
         definition:
@@ -143,12 +133,11 @@
                 - api
 
             api:
-              build: "."
+              build: "./"
               volumes:
                 - "./website:/var/www/html"
               ports:
                 - "5001:5000"
-        register: output
 
     - name: Push simple-api to private registry
       docker_image:
