@@ -139,14 +139,12 @@
           services:
             website:
               image: php:apache
-              container_name: app
               depends_on:
                 - api
               ports:
                 - "3000:80"
             api:
               build: "."
-              container_name: api
               name: simple-api
               volumes:
                 - "./website:/var/www/html"
