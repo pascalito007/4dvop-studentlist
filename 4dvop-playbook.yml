@@ -25,16 +25,16 @@
         name: docker-install-role
 
 
-- name: Install docker
+- name: Install docker locally
   hosts: local
   become: true
   
   pre_tasks:
-    - name: Install python pip
+    - name: Install python pip locally
       apt:
         name: python-pip
         state: latest
-    - name: Install docker-py
+    - name: Install docker locally
       pip:
         name: docker-py
 
