@@ -92,8 +92,6 @@
         image: registry
         ports:
           - "8000:5000"
-        networks:
-          - name: registry-network
 
     - name: Deploy private docker frontend registry task
       docker_container:
