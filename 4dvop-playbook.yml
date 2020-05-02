@@ -4,43 +4,17 @@
 #                ALL VM
 # ----------------------------------------------------------
 - name: Install docker
-  hosts: all:!local
+  hosts: all
   become: true
-  
-  pre_tasks:
-    - name: Install epel-release
-      yum:
-        name: epel-release
-        state: latest
-    - name: Install python pip
-      yum:
-        name: python-pip
-        state: latest
-    - name: Install docker-py
-      pip:
-        name: docker-py
+  vars:
+    pip_install_packages:
+      - name: docker
 
-  tasks:
-    - include_role: 
-        name: docker-install-role
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
 
 
-- name: Install docker locally
-  hosts: local
-  become: true
-  
-  pre_tasks:
-    - name: Install python pip locally
-      apt:
-        name: python-pip
-        state: latest
-    - name: Install docker locally
-      pip:
-        name: docker-py
-
-  tasks:
-    - include_role: 
-        name: docker-install-role
 
 # -----------------------------------------------------------------------------------------
 #     REPOSITORY  VM - SETUP postgres for gogs image and Gogs private git repository
