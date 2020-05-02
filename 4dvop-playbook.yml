@@ -9,7 +9,6 @@
   vars:
     pip_install_packages:
       - name: docker
-        docker_package_state: absent
 
   roles:
     - geerlingguy.pip
