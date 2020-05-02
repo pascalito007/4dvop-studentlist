@@ -132,6 +132,7 @@
     - name: Pull from registry
       docker_image:
         name: php:apache
+        pull: yes
         source: pull
 
 # ----------------------------------------------------------
