@@ -137,13 +137,13 @@
           services:
             website:
               image: php:apache
-              depends_on:
-                - api
               ports:
                 - "3000:80"
+              depends_on:
+                - api
+
             api:
               build: "."
-              name: simple-api
               volumes:
                 - "./website:/var/www/html"
               ports:
